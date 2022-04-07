@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { ethers } from "ethers"
-import { Row, Form, Button, Container } from 'react-bootstrap'
+import { Row, Form, Button } from 'react-bootstrap'
 import { create as ipfsHttpClient } from 'ipfs-http-client'
+import { useNavigate } from "react-router-dom";
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
 const Create = ({ marketplace, nft }) => {
+  const navigate = useNavigate();
   const [image, setImage] = useState('')
   const [price, setPrice] = useState(null)
   const [name, setName] = useState('')
@@ -42,6 +44,7 @@ const Create = ({ marketplace, nft }) => {
     // add nft to marketplace
     const listingPrice = ethers.utils.parseEther(price.toString())
     await(await marketplace.makeItem(nft.address, id, listingPrice)).wait()
+    navigate("/");
   }
 
   return (
