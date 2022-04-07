@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
 import { Row, Col, Card, Button } from 'react-bootstrap'
+import Detail from './Detail'
 
 const Home = ({ marketplace, nft, account }) => {
   const [loading, setLoading] = useState(true)
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState([]);
+  const [openDetail, setOpenDetail]= useState(false);
+  const [currentItem, setCurrentItem]= useState(null);
   const loadMarketplaceItems = async () => {
     // Load all unsold items
     const itemCount = await marketplace.itemCount()
@@ -20,9 +23,6 @@ const Home = ({ marketplace, nft, account }) => {
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(item.itemId)
         // Add item to items array
-        console.log("item.seller: ", item.seller)
-        console.log("account: ", account)
-        console.log("equal: ", JSON.stringify(item.seller.toLowerCase()) === JSON.stringify(account.toLowerCase()))
         items.push({
           totalPrice,
           itemId: item.itemId,
@@ -42,6 +42,15 @@ const Home = ({ marketplace, nft, account }) => {
     loadMarketplaceItems()
   }
 
+  const onCloseModal= ()=>{
+    setOpenDetail(false);
+  }
+
+  const onClickModal= (item)=>{
+    setOpenDetail(true);
+    setCurrentItem(item);
+  }
+
   useEffect(() => {
     loadMarketplaceItems()
   }, []);
@@ -59,27 +68,30 @@ const Home = ({ marketplace, nft, account }) => {
             {items.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
                 <Card>
-                  <Card.Img variant="top" src={item.image} />
+                  <Card.Img variant="top" src={item.image} onClick= {()=>onClickModal(item)}/>
                   <Card.Body color="secondary">
-                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Title style={{fontWeight: "bold"}}>{item.name}</Card.Title>
                     <Card.Text>
                       {item.description.length> 25 ? item.description.slice(0, 25) + '...' : item.description}
                     </Card.Text>
                   </Card.Body>
-                  <Card.Footer>
-                    {JSON.stringify(account.toLowerCase()) !== JSON.stringify(item.seller.toLowerCase()) ? <div className='d-grid'>
-                      <Button onClick={() => buyMarketItem(item)} variant="primary" size="lg">
+                  <Card.Footer style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <div className='d-grid'>
+                    {JSON.stringify(account.toLowerCase()) !== JSON.stringify(item.seller.toLowerCase()) ?
+                      <Button onClick={() => buyMarketItem(item)} size="lg" style={{backgroundColor: "#488FB1", borderColor: "#488FB1"}}>
                         Buy for: {ethers.utils.formatEther(item.totalPrice)} ETH
-                      </Button>
-                    </div>: 
-                    <Button variant="info" size="lg">
-                    Your item price: {ethers.utils.formatEther(item.totalPrice)} ETH
+                      </Button>: 
+                    <Button size="lg" style={{backgroundColor: "#94B49F", borderColor: "#94B49F"}}>
+                    NFT price: {ethers.utils.formatEther(item.totalPrice)} ETH
                   </Button>}
+                  </div>
                     </Card.Footer>
                 </Card>
               </Col>
             ))}
           </Row>
+          {openDetail && <Detail openDetail={openDetail} 
+                        onCloseModal={onCloseModal} item={currentItem} />}
         </div>
         : (
           <main style={{ padding: "1rem 0" }}>

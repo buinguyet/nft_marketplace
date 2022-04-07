@@ -51,6 +51,12 @@ export default function MyPurchases({ marketplace, nft, account }) {
               <Col key={idx} className="overflow-hidden">
                 <Card>
                   <Card.Img variant="top" src={item.image} />
+                  <Card.Body color="secondary">
+                    <Card.Title style={{fontWeight: "bold"}}>{item.name}</Card.Title>
+                    <Card.Text>
+                      {item.description.length> 25 ? item.description.slice(0, 25) + '...' : item.description}
+                    </Card.Text>
+                  </Card.Body>
                   <Card.Footer>{ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
                 </Card>
               </Col>
