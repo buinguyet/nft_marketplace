@@ -16,7 +16,7 @@ describe("NFTMarketplace", function () {
   let feePercent = 1;
   let URI = "sample URI"
 
-  beforeEach(async function () {
+  beforeEach(async function () { // always run first in all the test
     // Get the ContractFactories and Signers here.
     NFT = await ethers.getContractFactory("NFT");
     Marketplace = await ethers.getContractFactory("Marketplace");

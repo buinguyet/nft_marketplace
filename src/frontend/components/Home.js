@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
 import { Row, Col, Card, Button } from 'react-bootstrap'
 
-const Home = ({ marketplace, nft }) => {
+const Home = ({ marketplace, nft, account }) => {
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
   const loadMarketplaceItems = async () => {
@@ -20,6 +20,9 @@ const Home = ({ marketplace, nft }) => {
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(item.itemId)
         // Add item to items array
+        console.log("item.seller: ", item.seller)
+        console.log("account: ", account)
+        console.log("equal: ", JSON.stringify(item.seller.toLowerCase()) === JSON.stringify(account.toLowerCase()))
         items.push({
           totalPrice,
           itemId: item.itemId,
@@ -41,7 +44,8 @@ const Home = ({ marketplace, nft }) => {
 
   useEffect(() => {
     loadMarketplaceItems()
-  }, [])
+  }, []);
+
   if (loading) return (
     <main style={{ padding: "1rem 0" }}>
       <h2>Loading...</h2>
@@ -59,16 +63,19 @@ const Home = ({ marketplace, nft }) => {
                   <Card.Body color="secondary">
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>
-                      {item.description}
+                      {item.description.length> 25 ? item.description.slice(0, 25) + '...' : item.description}
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer>
-                    <div className='d-grid'>
+                    {JSON.stringify(account.toLowerCase()) !== JSON.stringify(item.seller.toLowerCase()) ? <div className='d-grid'>
                       <Button onClick={() => buyMarketItem(item)} variant="primary" size="lg">
-                        Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
+                        Buy for: {ethers.utils.formatEther(item.totalPrice)} ETH
                       </Button>
-                    </div>
-                  </Card.Footer>
+                    </div>: 
+                    <Button variant="info" size="lg">
+                    Your item price: {ethers.utils.formatEther(item.totalPrice)} ETH
+                  </Button>}
+                    </Card.Footer>
                 </Card>
               </Col>
             ))}
