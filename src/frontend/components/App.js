@@ -16,8 +16,6 @@ import { useState } from 'react'
 import { ethers } from "ethers"
 import { Spinner } from 'react-bootstrap'
 
-import './App.css';
-
 function App() {
   const [loading, setLoading] = useState(true)
   const [account, setAccount] = useState(null)
