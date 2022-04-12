@@ -6,6 +6,7 @@
 .pnp.js
 
 /secrets.json
+/hardhat.config.default
 
 # testing
 /coverage

@@ -68,11 +68,13 @@ const Home = ({ marketplace, nft, account }) => {
             {items.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
                 <Card>
-                  <Card.Img variant="top" src={item.image} onClick= {()=>onClickModal(item)}/>
+                  <div style={{height: "200px"}}>
+                  <Card.Img style={{height: "100%"}} variant="top" src={item.image} onClick= {()=>onClickModal(item)}/>
+                  </div>
                   <Card.Body color="secondary">
                     <Card.Title style={{fontWeight: "bold"}}>{item.name}</Card.Title>
                     <Card.Text>
-                      {item.description.length> 25 ? item.description.slice(0, 25) + '...' : item.description}
+                      {item.description.length> 20 ? item.description.slice(0, 20) + '...' : item.description}
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer style={{alignItems: 'center', justifyContent: 'center'}}>

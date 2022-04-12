@@ -10,7 +10,9 @@ function renderSoldItems(items) {
         {items.map((item, idx) => (
           <Col key={idx} className="overflow-hidden">
             <Card>
-              <Card.Img variant="top" src={item.image} />
+              <div style={{height: "200px"}}>
+                  <Card.Img style={{height: "100%"}} src={item.image} />
+                  </div>
               <Card.Body color="secondary">
                     <Card.Title style={{fontWeight: "bold"}}>{item.name}</Card.Title>
                     <Card.Text>
