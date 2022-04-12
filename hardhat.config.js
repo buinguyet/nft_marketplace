@@ -1,4 +1,7 @@
+const {privateKey}= require('./secrets.json') 
 require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-etherscan");
+
 
 module.exports = {
   solidity: "0.8.4",
@@ -9,8 +12,8 @@ module.exports = {
     tests: "./src/backend/test"
   },
   networks : {
-    localhost: {
-      url: "http://127.0.0.1:8545"
+    ropsten: {
+      url: "http://127.0.0.1:8545",
     },
     hardhat: {
       // See its defaults

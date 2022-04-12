@@ -4,11 +4,6 @@ async function main() {
 
   console.log("Deploying contracts with the account:", deployer.address);
   console.log("Account balance:", (await deployer.getBalance()).toString());
-
-  const network = await ethers.getDefaultProvider().getNetwork();
-  console.log("Network name=", network.name);
-  console.log("Network chain id=", network.chainId);
-
   
   // Get the ContractFactories and Signers here.
   const NFT = await ethers.getContractFactory("NFT");
